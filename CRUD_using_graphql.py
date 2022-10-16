@@ -25,11 +25,13 @@ class Query(ObjectType) :
     def resolve_user(self, info, name) :
 
         dict_of_user = list(db.users.find({"name" : name}, {"_id" : 0}))[0]
+
         return User(name = dict_of_user["name"], age = dict_of_user["age"])
 
     def resolve_users(self, info) :
 
         users = list(db.users.find({}, {"_id" : 0}))
+        
         return [User(name = _dict["name"], age = _dict["age"]) for _dict in users]
 
 class CreateUser(Mutation) :
