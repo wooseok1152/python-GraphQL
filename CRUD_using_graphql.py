@@ -40,18 +40,35 @@ class CreateUser(Mutation) :
         name = String()
         age  = Int()
 
-    # field of output(output : return for API)
+    # field of output(output : return value for API request)
     user = Field(User)
 
     def mutate(self, info, name, age) :
 
         db.users.insert_one({"name" : name, "age" : age})
         new_user = User(name = name, age = age)
+        
         return CreateUser(user = new_user)
+
+class DeleteUser(Mutation) :
+
+    class Arguments :
+
+        name = String()
+
+    user = Field(User)
+
+    def mutate(self, info, name) :
+
+        db.users.delete_one({"name" : name})
+        deleted_user = User(name)
+        
+        return DeleteUser(user = deleted_user)
 
 class Mutations(ObjectType) :
 
     create_user = CreateUser.Field()
+    delete_user = DeleteUser.Field()
 
 if __name__ == "__main__" :
 
@@ -63,20 +80,17 @@ if __name__ == "__main__" :
     #                                     user(name : "choi") {
     #                                                             name
     #                                                             age
-    #                                                         }
-    #                                     users {
-    #                                         name
-    #                                         age
     #                                     }
     #                                 }
     #                         ''')
 
     # Mutation
     result = schema.execute('''
-                                mutation createUser {
+                                mutation mutations {
                                     createUser(name : "lee", age : 35) {
                                         user {
                                             name
+                                            age
                                         }
                                     }
                                 }
