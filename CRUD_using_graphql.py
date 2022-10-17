@@ -31,7 +31,7 @@ class Query(ObjectType) :
     def resolve_users(self, info) :
 
         users = list(db.users.find({}, {"_id" : 0}))
-        
+
         return [User(name = _dict["name"], age = _dict["age"]) for _dict in users]
 
 class CreateUser(Mutation) :
@@ -98,5 +98,5 @@ if __name__ == "__main__" :
                                 }
                             ''')
 
-    print("* result :")
+    print("* result :") 
     print(result.data, "\n")
