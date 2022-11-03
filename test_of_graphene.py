@@ -15,12 +15,14 @@ class User(ObjectType) :                            # 'ObjectType'클래스를 �
 
 class Query(ObjectType) :
 
-    user = Field(User, args = {'name' : String(), 'age' : Int()})
-    users = List(User)
+    user = Field(User, args = {'name' : String(), 'age' : Int()})   # 'user'필드의 type이 'User'이기 때문에, resolve 함수가 연쇄적으로 호출됨
+                                                                    # ('resolve_user()' -> 'resolve_name()'&'resolve_age')
+    users = List(User)                                              # 'users'필드의 type이 'List(User)'이기 때문에, resolve 함수가 연쇄적으로 호출됨
+                                                                    # ('resolve_users()' -> 'resolve_name()'&'resolve_age')
 
     def resolve_user(self, info, name, age) :
 
-        return User(name = name, age = age)         # 'ObjectType'클래스의 생성자 함수가 호출됨
+        return User(name = name, age = age)                         # 'ObjectType'클래스의 생성자 함수가 호출됨
 
     def resolve_users(self, info) :
 
